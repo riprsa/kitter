@@ -1,0 +1,25 @@
+syntax = "proto3";
+package spec;
+
+service Catter {
+    // RegisterCat creates a cat by CreateCatRequest data
+    rpc RegisterCat (CreateCatRequest) returns (CreateCatResponse);
+}
+
+// CreateCatRequest is data for creating a cat
+message CreateCatRequest {
+    // name is a name of a cat
+    string name = 1;
+
+    // usename is unchangable username of a cat
+    string username = 2;
+
+    // bio is optional description of a cat
+    optional string bio = 3;
+}
+
+// CreateCatResponse is answer of service during creating a cat
+message CreateCatResponse {
+    // id is an id of a cat, it is unique
+    int64 id = 1;
+}
