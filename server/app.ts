@@ -1,42 +1,54 @@
 import * as grpc from "@grpc/grpc-js";
 import * as cat from "./../codegen/cat";
 import { catterDefinition, ICatter } from "./../codegen/cat.grpc-server";
+import { Storage } from "./db";
 
-function registerCat(call: grpc.ServerUnaryCall<cat.CreateCatRequest, cat.CreateCatResponse>, callback: grpc.sendUnaryData<cat.CreateCatResponse>): void {
+const storage = new Storage();
+
+async function registerCat(call: grpc.ServerUnaryCall<cat.CreateCatRequest, cat.CreateCatResponse>, callback: grpc.sendUnaryData<cat.CreateCatResponse>): Promise<void> {
     call.on('error', args => {
         console.log("grpc-server registerCat() got error:", args)
     })
 
-    const catResp = cat.CreateCatResponse.create({
-        id: BigInt(3),
+    let id = await storage.insertCat(call.request)
+        .catch(error => { callback(error, null) });
+
+    if (id) return callback(null, { id: BigInt(id) });
+    return callback({ code: grpc.status.INTERNAL, details: 'id is not right, unlikely case' });
+}
+
+function updateCatName(call: grpc.ServerUnaryCall<cat.UpdateCatFieldRequest, cat.Response>, callback: grpc.sendUnaryData<cat.Response>): void {
+    call.on('error', args => {
+        console.log("grpc-server updateCatName() got error:", args)
+    })
+    const resp = cat.Response.create({
+        code: 500,
+        message: "not implemented",
     });
-
-    callback(null, catResp);
+    callback(null, resp);
 }
 
-class CatService implements ICatter {
-    constructor() {
-        // TODO: db logic
-    }
-    [name: string]: grpc.UntypedHandleCall;
-
-    registerCat(call: grpc.ServerUnaryCall<cat.CreateCatRequest, cat.CreateCatResponse>, callback: grpc.sendUnaryData<cat.CreateCatResponse>): void {
-        call.on('error', args => {
-            console.log("grpc-server registerCat() got error:", args)
-        })
-        const catResp = cat.CreateCatResponse.create({
-            id: BigInt(3),
-        });
-        callback(null, catResp);
-    }
+function updateCatBio(call: grpc.ServerUnaryCall<cat.UpdateCatFieldRequest, cat.Response>, callback: grpc.sendUnaryData<cat.Response>): void {
+    call.on('error', args => {
+        console.log("grpc-server updateCatBio() got error:", args)
+    })
+    const resp = cat.Response.create({
+        code: 500,
+        message: "not implemented",
+    });
+    callback(null, resp);
 }
+
+const CatService: ICatter = {
+    registerCat,
+    updateCatName,
+    updateCatBio,
+};
 
 if (require.main === module) {
     let grpcServer = new grpc.Server();
 
-    let catService: ICatter = new CatService();
-
-    grpcServer.addService(catterDefinition, catService);
+    grpcServer.addService(catterDefinition, CatService);
 
     grpcServer.bindAsync(
         '127.0.0.1:8080',

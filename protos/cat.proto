@@ -1,9 +1,25 @@
 syntax = "proto3";
 package spec;
 
+import "google/protobuf/empty.proto";
+
 service Catter {
     // RegisterCat creates a cat by CreateCatRequest data
-    rpc RegisterCat (CreateCatRequest) returns (CreateCatResponse);
+    rpc RegisterCat(CreateCatRequest) returns (CreateCatResponse);
+    rpc UpdateCatName(UpdateCatFieldRequest) returns (google.protobuf.Empty);
+    rpc UpdateCatBio(UpdateCatFieldRequest) returns (google.protobuf.Empty);
+}
+
+// UpdateCatFieldRequest is used when need to update a field. It is not nesessary to specifiy a field if it is a string.
+message UpdateCatFieldRequest {
+    int64 id = 1;
+    string field = 2;
+}
+
+message Response {
+    // for now - HTTP codes
+    int32 code = 1;
+    string message = 2;
 }
 
 // CreateCatRequest is data for creating a cat

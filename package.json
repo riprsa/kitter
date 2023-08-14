@@ -5,6 +5,7 @@
     "sqlite3": "^5.1.6"
   },
   "devDependencies": {
-    "@types/node": "^20.4.10"
+    "@types/node": "^20.4.10",
+    "@types/sqlite3": "^3.1.8"
   }
 }

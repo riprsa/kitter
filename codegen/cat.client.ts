@@ -4,6 +4,8 @@
 import type { RpcTransport } from "@protobuf-ts/runtime-rpc";
 import type { ServiceInfo } from "@protobuf-ts/runtime-rpc";
 import { Catter } from "./cat";
+import type { Empty } from "./google/protobuf/empty";
+import type { UpdateCatFieldRequest } from "./cat";
 import { stackIntercept } from "@protobuf-ts/runtime-rpc";
 import type { CreateCatResponse } from "./cat";
 import type { CreateCatRequest } from "./cat";
@@ -19,6 +21,14 @@ export interface ICatterClient {
      * @generated from protobuf rpc: RegisterCat(spec.CreateCatRequest) returns (spec.CreateCatResponse);
      */
     registerCat(input: CreateCatRequest, options?: RpcOptions): UnaryCall<CreateCatRequest, CreateCatResponse>;
+    /**
+     * @generated from protobuf rpc: UpdateCatName(spec.UpdateCatFieldRequest) returns (google.protobuf.Empty);
+     */
+    updateCatName(input: UpdateCatFieldRequest, options?: RpcOptions): UnaryCall<UpdateCatFieldRequest, Empty>;
+    /**
+     * @generated from protobuf rpc: UpdateCatBio(spec.UpdateCatFieldRequest) returns (google.protobuf.Empty);
+     */
+    updateCatBio(input: UpdateCatFieldRequest, options?: RpcOptions): UnaryCall<UpdateCatFieldRequest, Empty>;
 }
 /**
  * @generated from protobuf service spec.Catter
@@ -37,5 +47,19 @@ export class CatterClient implements ICatterClient, ServiceInfo {
     registerCat(input: CreateCatRequest, options?: RpcOptions): UnaryCall<CreateCatRequest, CreateCatResponse> {
         const method = this.methods[0], opt = this._transport.mergeOptions(options);
         return stackIntercept<CreateCatRequest, CreateCatResponse>("unary", this._transport, method, opt, input);
+    }
+    /**
+     * @generated from protobuf rpc: UpdateCatName(spec.UpdateCatFieldRequest) returns (google.protobuf.Empty);
+     */
+    updateCatName(input: UpdateCatFieldRequest, options?: RpcOptions): UnaryCall<UpdateCatFieldRequest, Empty> {
+        const method = this.methods[1], opt = this._transport.mergeOptions(options);
+        return stackIntercept<UpdateCatFieldRequest, Empty>("unary", this._transport, method, opt, input);
+    }
+    /**
+     * @generated from protobuf rpc: UpdateCatBio(spec.UpdateCatFieldRequest) returns (google.protobuf.Empty);
+     */
+    updateCatBio(input: UpdateCatFieldRequest, options?: RpcOptions): UnaryCall<UpdateCatFieldRequest, Empty> {
+        const method = this.methods[2], opt = this._transport.mergeOptions(options);
+        return stackIntercept<UpdateCatFieldRequest, Empty>("unary", this._transport, method, opt, input);
     }
 }

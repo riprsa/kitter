@@ -4,6 +4,8 @@
 import { Catter } from "./cat";
 import type { BinaryWriteOptions } from "@protobuf-ts/runtime";
 import type { BinaryReadOptions } from "@protobuf-ts/runtime";
+import type { Empty } from "./google/protobuf/empty";
+import type { UpdateCatFieldRequest } from "./cat";
 import type { CreateCatResponse } from "./cat";
 import type { CreateCatRequest } from "./cat";
 import * as grpc from "@grpc/grpc-js";
@@ -20,6 +22,20 @@ export interface ICatterClient {
     registerCat(input: CreateCatRequest, metadata: grpc.Metadata, callback: (err: grpc.ServiceError | null, value?: CreateCatResponse) => void): grpc.ClientUnaryCall;
     registerCat(input: CreateCatRequest, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: CreateCatResponse) => void): grpc.ClientUnaryCall;
     registerCat(input: CreateCatRequest, callback: (err: grpc.ServiceError | null, value?: CreateCatResponse) => void): grpc.ClientUnaryCall;
+    /**
+     * @generated from protobuf rpc: UpdateCatName(spec.UpdateCatFieldRequest) returns (google.protobuf.Empty);
+     */
+    updateCatName(input: UpdateCatFieldRequest, metadata: grpc.Metadata, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: Empty) => void): grpc.ClientUnaryCall;
+    updateCatName(input: UpdateCatFieldRequest, metadata: grpc.Metadata, callback: (err: grpc.ServiceError | null, value?: Empty) => void): grpc.ClientUnaryCall;
+    updateCatName(input: UpdateCatFieldRequest, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: Empty) => void): grpc.ClientUnaryCall;
+    updateCatName(input: UpdateCatFieldRequest, callback: (err: grpc.ServiceError | null, value?: Empty) => void): grpc.ClientUnaryCall;
+    /**
+     * @generated from protobuf rpc: UpdateCatBio(spec.UpdateCatFieldRequest) returns (google.protobuf.Empty);
+     */
+    updateCatBio(input: UpdateCatFieldRequest, metadata: grpc.Metadata, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: Empty) => void): grpc.ClientUnaryCall;
+    updateCatBio(input: UpdateCatFieldRequest, metadata: grpc.Metadata, callback: (err: grpc.ServiceError | null, value?: Empty) => void): grpc.ClientUnaryCall;
+    updateCatBio(input: UpdateCatFieldRequest, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: Empty) => void): grpc.ClientUnaryCall;
+    updateCatBio(input: UpdateCatFieldRequest, callback: (err: grpc.ServiceError | null, value?: Empty) => void): grpc.ClientUnaryCall;
 }
 /**
  * @generated from protobuf service spec.Catter
@@ -38,5 +54,19 @@ export class CatterClient extends grpc.Client implements ICatterClient {
     registerCat(input: CreateCatRequest, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: CreateCatResponse) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: CreateCatResponse) => void), callback?: ((err: grpc.ServiceError | null, value?: CreateCatResponse) => void)): grpc.ClientUnaryCall {
         const method = Catter.methods[0];
         return this.makeUnaryRequest<CreateCatRequest, CreateCatResponse>(`/${Catter.typeName}/${method.name}`, (value: CreateCatRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): CreateCatResponse => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
+    }
+    /**
+     * @generated from protobuf rpc: UpdateCatName(spec.UpdateCatFieldRequest) returns (google.protobuf.Empty);
+     */
+    updateCatName(input: UpdateCatFieldRequest, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: Empty) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: Empty) => void), callback?: ((err: grpc.ServiceError | null, value?: Empty) => void)): grpc.ClientUnaryCall {
+        const method = Catter.methods[1];
+        return this.makeUnaryRequest<UpdateCatFieldRequest, Empty>(`/${Catter.typeName}/${method.name}`, (value: UpdateCatFieldRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): Empty => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
+    }
+    /**
+     * @generated from protobuf rpc: UpdateCatBio(spec.UpdateCatFieldRequest) returns (google.protobuf.Empty);
+     */
+    updateCatBio(input: UpdateCatFieldRequest, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: Empty) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: Empty) => void), callback?: ((err: grpc.ServiceError | null, value?: Empty) => void)): grpc.ClientUnaryCall {
+        const method = Catter.methods[2];
+        return this.makeUnaryRequest<UpdateCatFieldRequest, Empty>(`/${Catter.typeName}/${method.name}`, (value: UpdateCatFieldRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): Empty => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
     }
 }

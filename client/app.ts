@@ -20,7 +20,7 @@ class Client {
             req,
             (err, value) => {
                 if (err) {
-                    console.log("got err: ", err)
+                    console.log("got err: ", err.message)
                 }
                 if (value) {
                     console.log("got response message: ", value)
