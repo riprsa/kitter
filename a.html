@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f8fa;
+        }
+
+        header {
+            background-color: #00aced;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+
+        #profile-container {
+            display: flex;
+            width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        nav {
+            flex: 1;
+            padding: 20px;
+            border-right: 1px solid #e1e8ed;
+        }
+
+        nav img {
+            width: 100px;
+            border-radius: 50%;
+        }
+
+        nav h2 {
+            margin: 10px 0;
+            font-size: 24px;
+        }
+
+        main {
+            flex: 2;
+        }
+
+        .tweet {
+            padding: 10px;
+            border-bottom: 1px solid #e1e8ed;
+        }
+
+        .tweet:last-child {
+            border-bottom: none;
+        }
+
+        .tweet img {
+            width: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        .tweet .tweet-content {
+            display: inline-block;
+            width: calc(100% - 60px);
+        }
+
+        .tweet .tweet-content .user-info {
+            font-size: 14px;
+            color: #777;
+        }
+
+        .tweet .tweet-content .user-info span {
+            font-weight: bold;
+        }
+
+        .tweet .tweet-content h3 {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .tweet .tweet-content p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #333;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>User Profile Page</h1>
+    </header>
+    <div id="profile-container">
+        <nav>
+            <img src="profile.jpg" alt="Profile Picture">
+            <h2>John Doe</h2>
+            <p>Web Developer | Nature Lover | Coffee Addict</p>
+        </nav>
+        <main>
+            <div class="tweet">
+                <img src="profile1.jpg" alt="Profile Picture">
+                <div class="tweet-content">
+                    <div class="user-info">
+                        <span>John Doe</span> @johndoe • 2h
+                    </div>
+                    <h3>Just had a great day at the park! 🌳🌞 #NatureLovers</h3>
+                    <p>Feeling refreshed and energized after spending time outdoors.</p>
+                </div>
+            </div>
+            <div class="tweet">
+                <img src="profile2.jpg" alt="Profile Picture">
+                <div class="tweet-content">
+                    <div class="user-info">
+                        <span>Jane Smith</span> @janesmith • 5h
+                    </div>
+                    <h3>Excited to start my new job tomorrow! 🎉👩‍💼 #NewBeginnings</h3>
+                    <p>Looking forward to new challenges and opportunities ahead.</p>
+                </div>
+            </div>
+            <!-- Add more tweets here -->
+        </main>
+    </div>
+</body>
+
+</html>

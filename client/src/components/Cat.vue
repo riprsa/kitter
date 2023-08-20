@@ -1,16 +1,14 @@
 <template>
-    <div v-if="!isLoading" class="cat-profile">
-        <h2 class="cat-name">{{ cat.name }}</h2>
-        <p class="cat-bio">{{ cat.bio }}</p>
-    </div>
-    <div v-else class="cat-profile">
-        Loading cat data...
-    </div>
+    <nav v-if="!isLoading">
+        <img src="/src/assets/example-pfp.jpg" alt="Profile Picture">
+        <h2>{{ cat.name }}</h2>
+        <p>{{ cat.bio }}</p>
+    </nav>
 </template>
 
 <script lang="ts">
-import type { GetCatResponse } from 'generated/cat';
 import type { PropType } from 'vue';
+import type { GetCatResponse } from './../../generated/cat';
 
 export default {
     props: {

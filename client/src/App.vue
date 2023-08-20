@@ -1,18 +1,29 @@
 <template>
-  <nav>
+  <header>
+    <h1>Cat Profile Page</h1>
+  </header>
+
+  <section id="profile-container">
+    <!-- cat's profile -->
     <Cat :cat="cat" :is-loading="isLoading" />
-  </nav>
+
+    <main>
+
+      <Kitt />
+
+    </main>
+
+  </section>
 </template>
 
 <script lang="ts">
 import type { GetCatResponse } from 'generated/cat';
-import { FetchRPC } from 'twirp-ts';
 import { defineComponent } from "vue";
-import { CatterClientJSON } from './../generated/cat.twirp';
+
+import { client } from "./client";
 
 import Cat from "./components/Cat.vue";
-
-let client: CatterClientJSON;
+import Kitt from "./components/Kitt.vue";
 
 export default defineComponent({
   data() {
@@ -24,12 +35,7 @@ export default defineComponent({
 
   components: {
     Cat,
-  },
-
-  setup() {
-    client = new CatterClientJSON(FetchRPC({
-      baseUrl: "http://localhost:8080/api"
-    }))
+    Kitt,
   },
 
   methods: {
