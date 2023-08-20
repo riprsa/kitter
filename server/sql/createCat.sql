@@ -4,4 +4,3 @@ CREATE TABLE IF NOT EXISTS cat (
     username VARCHAR(32) NOT NULL UNIQUE,
     bio TEXT
 )
-
