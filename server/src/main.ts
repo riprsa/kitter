@@ -1,21 +1,25 @@
 import cors from 'cors';
 import express from "express";
 import { TwirpContext } from "twirp-ts";
-import { GetCatRequest, GetCatResponse } from "./../generated/cat";
+import { CreateCatRequest, GetCatRequest, GetCatResponse } from "./../generated/cat";
 import { createCatterServer } from "./../generated/cat.twirp";
+import { Storage } from "./db";
 
+let storage = new Storage();
 
 const server = createCatterServer({
     async GetCat(ctx: TwirpContext, request: GetCatRequest): Promise<GetCatResponse> {
-        // ctx.res.setHeader('Access-Control-Allow-Origin', '*');
-        let cat = GetCatResponse.create({
-            id: 1,
-            name: "kitten",
-            username: "kitten1",
-            bio: "silly cat!1",
+        let resp = await storage.selectCat(request.id);
+        console.log(resp);
+        return resp;
+    },
+
+    async RegisterCat(ctx: TwirpContext, request: CreateCatRequest): Promise<GetCatResponse> {
+        let resp = await storage.insertCat(request);
+        console.log(resp);
+        return GetCatResponse.create({
+            id: resp,
         });
-        console.log(request.id);
-        return cat;
     },
 });
 

@@ -4,8 +4,8 @@ package spec;
 // import "google/protobuf/empty.proto";
 
 service Catter {
-    // // RegisterCat creates a cat by CreateCatRequest data
-    // rpc RegisterCat(CreateCatRequest) returns (CreateCatResponse);
+    // RegisterCat creates a cat by CreateCatRequest data
+    rpc RegisterCat(CreateCatRequest) returns (CreateCatResponse);
 
     // // UpdateCatName updates a name of a cat
     // rpc UpdateCatName(UpdateCatFieldRequest) returns (google.protobuf.Empty);

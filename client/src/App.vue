@@ -1,63 +1,26 @@
-<template>
+<!-- <template>
   <header>
     <h1>Cat Profile Page</h1>
+    <nav>
+      <ul>
+        <li><router-link to="/">Home</router-link></li>
+        <li><router-link to="/register">Register</router-link></li>
+        <li><router-link to="/contact">Contact</router-link></li>
+      </ul>
+    </nav>
   </header>
 
-  <section id="profile-container">
-    <!-- cat's profile -->
-    <Cat :cat="cat" :is-loading="isLoading" />
+  <div id="app">
+    <router-view></router-view> // add router view component
+  </div>
+</template> -->
 
-    <main>
-
-      <Kitt />
-
-    </main>
-
-  </section>
+<template>
+  <nav>
+    <router-link to="/">Home</router-link> | <a aria-disabled="true">About</a> |
+    <router-link to="/register">Register</router-link>
+  </nav>
+  <main>
+    <router-view />
+  </main>
 </template>
-
-<script lang="ts">
-import type { GetCatResponse } from 'generated/cat';
-import { defineComponent } from "vue";
-
-import { client } from "./client";
-
-import Cat from "./components/Cat.vue";
-import Kitt from "./components/Kitt.vue";
-
-export default defineComponent({
-  data() {
-    return {
-      cat: {} as GetCatResponse,
-      isLoading: false,
-    }
-  },
-
-  components: {
-    Cat,
-    Kitt,
-  },
-
-  methods: {
-    fetchCat() {
-      this.isLoading = true
-
-      client.GetCat({ id: 1 })
-        .then((m) => {
-          this.cat = m;
-        })
-        .catch((error) => {
-          console.log(error)
-        })
-        .finally(() => {
-          this.isLoading = false
-        })
-    }
-  },
-
-  created() {
-    this.fetchCat()
-  },
-});
-
-</script>

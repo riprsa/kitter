@@ -1,4 +1,4 @@
-import * as cat from "../codegen/cat";
+import * as cat from "./../generated/cat";
 import { Storage } from "./db";
 
 const storage = new Storage();

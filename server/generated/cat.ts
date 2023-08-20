@@ -459,5 +459,6 @@ export const CreateCatResponse = new CreateCatResponse$Type();
  * @generated ServiceType for protobuf service spec.Catter
  */
 export const Catter = new ServiceType("spec.Catter", [
+    { name: "RegisterCat", options: {}, I: CreateCatRequest, O: CreateCatResponse },
     { name: "GetCat", options: {}, I: GetCatRequest, O: GetCatResponse }
 ]);
