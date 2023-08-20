@@ -1,52 +1,43 @@
 <template>
     <div>
-        <h1>Create a Cat-User</h1>
+        <h1>Register new cat</h1>
         <form @submit.prevent="submitForm">
             <div>
                 <label for="name">Name:</label>
-                <input type="text" id="name" v-model="catUser.name" required>
+                <input type="text" id="name" v-model="cat.name" required>
             </div>
             <div>
-                <label for="age">Age:</label>
-                <input type="number" id="age" v-model="catUser.age" required>
+                <label for="age">Username:</label>
+                <input type="text" id="username" v-model="cat.username" required>
             </div>
             <div>
-                <label for="breed">Breed:</label>
-                <input type="text" id="breed" v-model="catUser.breed" required>
+                <label for="bio">Bio:</label>
+                <input type="text" id="bio" v-model="cat.bio" required>
             </div>
-            <div>
-                <label for="color">Color:</label>
-                <input type="text" id="color" v-model="catUser.color" required>
-            </div>
-            <button type="submit">Create Cat-User</button>
+            <button type="submit">Register Cat</button>
         </form>
     </div>
 </template>
 
 <script lang="ts">
+import { client } from '@/client';
+import { CreateCatRequest } from 'generated/cat';
+
 export default {
     data() {
         return {
-            catUser: {
-                name: '',
-                age: '',
-                breed: '',
-                color: ''
-            }
+            cat: {} as CreateCatRequest,
         }
     },
     methods: {
         submitForm() {
-            // Send the catUser data to the server to create a new cat-user
-            // You can use axios or any other HTTP client library to make the request
-            // Example:
-            // axios.post('/api/cat-users', this.catUser)
-            //   .then(response => {
-            //     console.log(response.data)
-            //   })
-            //   .catch(error => {
-            //     console.log(error)
-            //   })
+            client.RegisterCat(this.cat)
+                .then(response => {
+                    console.log(response)
+                })
+                .catch(error => {
+                    console.log(error)
+                })
         }
     }
 }

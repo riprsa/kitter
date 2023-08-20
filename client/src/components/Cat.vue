@@ -7,8 +7,8 @@
 </template>
 
 <script lang="ts">
-import type { GetCatResponse } from '@/generated/cat';
 import type { PropType } from 'vue';
+import type { GetCatResponse } from './../../generated/cat';
 
 export default {
     props: {

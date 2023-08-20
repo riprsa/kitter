@@ -15,7 +15,7 @@ import Cat from "@/components/Cat.vue";
 import Kitt from "@/components/Kitt.vue";
 
 import { client } from "@/client";
-import type { GetCatResponse } from "twirp/cat";
+import type { GetCatResponse } from "./../../generated/cat";
 
 export default {
     data() {
@@ -34,7 +34,7 @@ export default {
         fetchCat() {
             this.isLoading = true
 
-            client.GetCat({ id: 1 })
+            client.GetCat({ id: 3 })
                 .then((m) => {
                     this.cat = m;
                 })
