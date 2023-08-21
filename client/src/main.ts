@@ -4,4 +4,10 @@ import { createApp } from 'vue'
 import './assets/base.css'
 import './assets/new.css'
 
-createApp(App).use(router).mount('#app')
+import VueCookies from 'vue-cookies'
+
+const app = createApp(App);
+
+app.use(router)
+    .use(VueCookies)
+    .mount('#app')

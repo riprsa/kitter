@@ -9,8 +9,10 @@ import {
   chainInterceptors,
 } from "twirp-ts";
 import {
-  CreateCatRequest,
-  CreateCatResponse,
+  RegisterCatRequest,
+  RegisterCatResponse,
+  LoginCatRequest,
+  LoginCatResponse,
   GetCatRequest,
   GetCatResponse,
 } from "./cat";
@@ -29,7 +31,8 @@ interface Rpc {
 }
 
 export interface CatterClient {
-  RegisterCat(request: CreateCatRequest): Promise<CreateCatResponse>;
+  Register(request: RegisterCatRequest): Promise<RegisterCatResponse>;
+  Login(request: LoginCatRequest): Promise<LoginCatResponse>;
   GetCat(request: GetCatRequest): Promise<GetCatResponse>;
 }
 
@@ -37,22 +40,39 @@ export class CatterClientJSON implements CatterClient {
   private readonly rpc: Rpc;
   constructor(rpc: Rpc) {
     this.rpc = rpc;
-    this.RegisterCat.bind(this);
+    this.Register.bind(this);
+    this.Login.bind(this);
     this.GetCat.bind(this);
   }
-  RegisterCat(request: CreateCatRequest): Promise<CreateCatResponse> {
-    const data = CreateCatRequest.toJson(request, {
+  Register(request: RegisterCatRequest): Promise<RegisterCatResponse> {
+    const data = RegisterCatRequest.toJson(request, {
       useProtoFieldName: true,
       emitDefaultValues: false,
     });
     const promise = this.rpc.request(
       "spec.Catter",
-      "RegisterCat",
+      "Register",
       "application/json",
       data as object
     );
     return promise.then((data) =>
-      CreateCatResponse.fromJson(data as any, { ignoreUnknownFields: true })
+      RegisterCatResponse.fromJson(data as any, { ignoreUnknownFields: true })
+    );
+  }
+
+  Login(request: LoginCatRequest): Promise<LoginCatResponse> {
+    const data = LoginCatRequest.toJson(request, {
+      useProtoFieldName: true,
+      emitDefaultValues: false,
+    });
+    const promise = this.rpc.request(
+      "spec.Catter",
+      "Login",
+      "application/json",
+      data as object
+    );
+    return promise.then((data) =>
+      LoginCatResponse.fromJson(data as any, { ignoreUnknownFields: true })
     );
   }
 
@@ -77,19 +97,33 @@ export class CatterClientProtobuf implements CatterClient {
   private readonly rpc: Rpc;
   constructor(rpc: Rpc) {
     this.rpc = rpc;
-    this.RegisterCat.bind(this);
+    this.Register.bind(this);
+    this.Login.bind(this);
     this.GetCat.bind(this);
   }
-  RegisterCat(request: CreateCatRequest): Promise<CreateCatResponse> {
-    const data = CreateCatRequest.toBinary(request);
+  Register(request: RegisterCatRequest): Promise<RegisterCatResponse> {
+    const data = RegisterCatRequest.toBinary(request);
     const promise = this.rpc.request(
       "spec.Catter",
-      "RegisterCat",
+      "Register",
       "application/protobuf",
       data
     );
     return promise.then((data) =>
-      CreateCatResponse.fromBinary(data as Uint8Array)
+      RegisterCatResponse.fromBinary(data as Uint8Array)
+    );
+  }
+
+  Login(request: LoginCatRequest): Promise<LoginCatResponse> {
+    const data = LoginCatRequest.toBinary(request);
+    const promise = this.rpc.request(
+      "spec.Catter",
+      "Login",
+      "application/protobuf",
+      data
+    );
+    return promise.then((data) =>
+      LoginCatResponse.fromBinary(data as Uint8Array)
     );
   }
 
@@ -112,16 +146,22 @@ export class CatterClientProtobuf implements CatterClient {
 //==================================//
 
 export interface CatterTwirp<T extends TwirpContext = TwirpContext> {
-  RegisterCat(ctx: T, request: CreateCatRequest): Promise<CreateCatResponse>;
+  Register(ctx: T, request: RegisterCatRequest): Promise<RegisterCatResponse>;
+  Login(ctx: T, request: LoginCatRequest): Promise<LoginCatResponse>;
   GetCat(ctx: T, request: GetCatRequest): Promise<GetCatResponse>;
 }
 
 export enum CatterMethod {
-  RegisterCat = "RegisterCat",
+  Register = "Register",
+  Login = "Login",
   GetCat = "GetCat",
 }
 
-export const CatterMethodList = [CatterMethod.RegisterCat, CatterMethod.GetCat];
+export const CatterMethodList = [
+  CatterMethod.Register,
+  CatterMethod.Login,
+  CatterMethod.GetCat,
+];
 
 export function createCatterServer<T extends TwirpContext = TwirpContext>(
   service: CatterTwirp<T>
@@ -140,16 +180,27 @@ function matchCatterRoute<T extends TwirpContext = TwirpContext>(
   events: RouterEvents<T>
 ) {
   switch (method) {
-    case "RegisterCat":
+    case "Register":
       return async (
         ctx: T,
         service: CatterTwirp,
         data: Buffer,
-        interceptors?: Interceptor<T, CreateCatRequest, CreateCatResponse>[]
+        interceptors?: Interceptor<T, RegisterCatRequest, RegisterCatResponse>[]
       ) => {
-        ctx = { ...ctx, methodName: "RegisterCat" };
+        ctx = { ...ctx, methodName: "Register" };
         await events.onMatch(ctx);
-        return handleCatterRegisterCatRequest(ctx, service, data, interceptors);
+        return handleCatterRegisterRequest(ctx, service, data, interceptors);
+      };
+    case "Login":
+      return async (
+        ctx: T,
+        service: CatterTwirp,
+        data: Buffer,
+        interceptors?: Interceptor<T, LoginCatRequest, LoginCatResponse>[]
+      ) => {
+        ctx = { ...ctx, methodName: "Login" };
+        await events.onMatch(ctx);
+        return handleCatterLoginRequest(ctx, service, data, interceptors);
       };
     case "GetCat":
       return async (
@@ -169,22 +220,34 @@ function matchCatterRoute<T extends TwirpContext = TwirpContext>(
   }
 }
 
-function handleCatterRegisterCatRequest<T extends TwirpContext = TwirpContext>(
+function handleCatterRegisterRequest<T extends TwirpContext = TwirpContext>(
   ctx: T,
   service: CatterTwirp,
   data: Buffer,
-  interceptors?: Interceptor<T, CreateCatRequest, CreateCatResponse>[]
+  interceptors?: Interceptor<T, RegisterCatRequest, RegisterCatResponse>[]
 ): Promise<string | Uint8Array> {
   switch (ctx.contentType) {
     case TwirpContentType.JSON:
-      return handleCatterRegisterCatJSON<T>(ctx, service, data, interceptors);
+      return handleCatterRegisterJSON<T>(ctx, service, data, interceptors);
     case TwirpContentType.Protobuf:
-      return handleCatterRegisterCatProtobuf<T>(
-        ctx,
-        service,
-        data,
-        interceptors
-      );
+      return handleCatterRegisterProtobuf<T>(ctx, service, data, interceptors);
+    default:
+      const msg = "unexpected Content-Type";
+      throw new TwirpError(TwirpErrorCode.BadRoute, msg);
+  }
+}
+
+function handleCatterLoginRequest<T extends TwirpContext = TwirpContext>(
+  ctx: T,
+  service: CatterTwirp,
+  data: Buffer,
+  interceptors?: Interceptor<T, LoginCatRequest, LoginCatResponse>[]
+): Promise<string | Uint8Array> {
+  switch (ctx.contentType) {
+    case TwirpContentType.JSON:
+      return handleCatterLoginJSON<T>(ctx, service, data, interceptors);
+    case TwirpContentType.Protobuf:
+      return handleCatterLoginProtobuf<T>(ctx, service, data, interceptors);
     default:
       const msg = "unexpected Content-Type";
       throw new TwirpError(TwirpErrorCode.BadRoute, msg);
@@ -207,20 +270,18 @@ function handleCatterGetCatRequest<T extends TwirpContext = TwirpContext>(
       throw new TwirpError(TwirpErrorCode.BadRoute, msg);
   }
 }
-async function handleCatterRegisterCatJSON<
-  T extends TwirpContext = TwirpContext
->(
+async function handleCatterRegisterJSON<T extends TwirpContext = TwirpContext>(
   ctx: T,
   service: CatterTwirp,
   data: Buffer,
-  interceptors?: Interceptor<T, CreateCatRequest, CreateCatResponse>[]
+  interceptors?: Interceptor<T, RegisterCatRequest, RegisterCatResponse>[]
 ) {
-  let request: CreateCatRequest;
-  let response: CreateCatResponse;
+  let request: RegisterCatRequest;
+  let response: RegisterCatResponse;
 
   try {
     const body = JSON.parse(data.toString() || "{}");
-    request = CreateCatRequest.fromJson(body, { ignoreUnknownFields: true });
+    request = RegisterCatRequest.fromJson(body, { ignoreUnknownFields: true });
   } catch (e) {
     if (e instanceof Error) {
       const msg = "the json request could not be decoded";
@@ -231,18 +292,58 @@ async function handleCatterRegisterCatJSON<
   if (interceptors && interceptors.length > 0) {
     const interceptor = chainInterceptors(...interceptors) as Interceptor<
       T,
-      CreateCatRequest,
-      CreateCatResponse
+      RegisterCatRequest,
+      RegisterCatResponse
     >;
     response = await interceptor(ctx, request!, (ctx, inputReq) => {
-      return service.RegisterCat(ctx, inputReq);
+      return service.Register(ctx, inputReq);
     });
   } else {
-    response = await service.RegisterCat(ctx, request!);
+    response = await service.Register(ctx, request!);
   }
 
   return JSON.stringify(
-    CreateCatResponse.toJson(response, {
+    RegisterCatResponse.toJson(response, {
+      useProtoFieldName: true,
+      emitDefaultValues: false,
+    }) as string
+  );
+}
+
+async function handleCatterLoginJSON<T extends TwirpContext = TwirpContext>(
+  ctx: T,
+  service: CatterTwirp,
+  data: Buffer,
+  interceptors?: Interceptor<T, LoginCatRequest, LoginCatResponse>[]
+) {
+  let request: LoginCatRequest;
+  let response: LoginCatResponse;
+
+  try {
+    const body = JSON.parse(data.toString() || "{}");
+    request = LoginCatRequest.fromJson(body, { ignoreUnknownFields: true });
+  } catch (e) {
+    if (e instanceof Error) {
+      const msg = "the json request could not be decoded";
+      throw new TwirpError(TwirpErrorCode.Malformed, msg).withCause(e, true);
+    }
+  }
+
+  if (interceptors && interceptors.length > 0) {
+    const interceptor = chainInterceptors(...interceptors) as Interceptor<
+      T,
+      LoginCatRequest,
+      LoginCatResponse
+    >;
+    response = await interceptor(ctx, request!, (ctx, inputReq) => {
+      return service.Login(ctx, inputReq);
+    });
+  } else {
+    response = await service.Login(ctx, request!);
+  }
+
+  return JSON.stringify(
+    LoginCatResponse.toJson(response, {
       useProtoFieldName: true,
       emitDefaultValues: false,
     }) as string
@@ -288,19 +389,19 @@ async function handleCatterGetCatJSON<T extends TwirpContext = TwirpContext>(
     }) as string
   );
 }
-async function handleCatterRegisterCatProtobuf<
+async function handleCatterRegisterProtobuf<
   T extends TwirpContext = TwirpContext
 >(
   ctx: T,
   service: CatterTwirp,
   data: Buffer,
-  interceptors?: Interceptor<T, CreateCatRequest, CreateCatResponse>[]
+  interceptors?: Interceptor<T, RegisterCatRequest, RegisterCatResponse>[]
 ) {
-  let request: CreateCatRequest;
-  let response: CreateCatResponse;
+  let request: RegisterCatRequest;
+  let response: RegisterCatResponse;
 
   try {
-    request = CreateCatRequest.fromBinary(data);
+    request = RegisterCatRequest.fromBinary(data);
   } catch (e) {
     if (e instanceof Error) {
       const msg = "the protobuf request could not be decoded";
@@ -311,17 +412,51 @@ async function handleCatterRegisterCatProtobuf<
   if (interceptors && interceptors.length > 0) {
     const interceptor = chainInterceptors(...interceptors) as Interceptor<
       T,
-      CreateCatRequest,
-      CreateCatResponse
+      RegisterCatRequest,
+      RegisterCatResponse
     >;
     response = await interceptor(ctx, request!, (ctx, inputReq) => {
-      return service.RegisterCat(ctx, inputReq);
+      return service.Register(ctx, inputReq);
     });
   } else {
-    response = await service.RegisterCat(ctx, request!);
+    response = await service.Register(ctx, request!);
   }
 
-  return Buffer.from(CreateCatResponse.toBinary(response));
+  return Buffer.from(RegisterCatResponse.toBinary(response));
+}
+
+async function handleCatterLoginProtobuf<T extends TwirpContext = TwirpContext>(
+  ctx: T,
+  service: CatterTwirp,
+  data: Buffer,
+  interceptors?: Interceptor<T, LoginCatRequest, LoginCatResponse>[]
+) {
+  let request: LoginCatRequest;
+  let response: LoginCatResponse;
+
+  try {
+    request = LoginCatRequest.fromBinary(data);
+  } catch (e) {
+    if (e instanceof Error) {
+      const msg = "the protobuf request could not be decoded";
+      throw new TwirpError(TwirpErrorCode.Malformed, msg).withCause(e, true);
+    }
+  }
+
+  if (interceptors && interceptors.length > 0) {
+    const interceptor = chainInterceptors(...interceptors) as Interceptor<
+      T,
+      LoginCatRequest,
+      LoginCatResponse
+    >;
+    response = await interceptor(ctx, request!, (ctx, inputReq) => {
+      return service.Login(ctx, inputReq);
+    });
+  } else {
+    response = await service.Login(ctx, request!);
+  }
+
+  return Buffer.from(LoginCatResponse.toBinary(response));
 }
 
 async function handleCatterGetCatProtobuf<

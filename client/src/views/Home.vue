@@ -34,7 +34,11 @@ export default {
         fetchCat() {
             this.isLoading = true
 
-            client.GetCat({ id: 3 })
+            let d = this.$cookies.get("login");
+
+            let id = Number(d);
+
+            client.GetCat({ id: id })
                 .then((m) => {
                     this.cat = m;
                 })

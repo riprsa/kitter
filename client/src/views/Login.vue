@@ -1,42 +1,37 @@
 <template>
     <div>
-        <h1>Register new cat</h1>
+        <h1>Login</h1>
         <form @submit.prevent="submitForm">
-            <div>
-                <label for="name">Name:</label>
-                <input type="text" id="name" v-model="cat.name" required>
-            </div>
             <div>
                 <label for="age">Username:</label>
                 <input type="text" id="username" v-model="cat.username" required>
             </div>
             <div>
-                <label for="bio">Bio:</label>
-                <input type="text" id="bio" v-model="cat.bio" required>
-            </div>
-            <div>
-                <label for="password">Password:</label>
+                <label for="bio">Password:</label>
                 <input type="text" id="password" v-model="cat.password" required>
             </div>
-            <button type="submit">Register Cat</button>
+            <button type="submit">Login</button>
         </form>
     </div>
 </template>
 
 <script lang="ts">
 import { client } from '@/client';
-import { RegisterCatRequest } from './../../generated/cat';
+import { LoginCatRequest } from './../../generated/cat';
+
 
 export default {
     data() {
+
         return {
-            cat: {} as RegisterCatRequest,
+            cat: {} as LoginCatRequest,
         }
     },
     methods: {
         submitForm() {
-            client.Register(this.cat)
+            client.Login(this.cat)
                 .then(response => {
+                    this.$cookies.set("login", response.id);
                     console.log(response)
                 })
                 .catch(error => {

@@ -13,6 +13,7 @@
     "@protobuf-ts/runtime-rpc": "^2.9.1",
     "twirp-ts": "^2.5.0",
     "vue": "^3.3.4",
+    "vue-cookies": "^1.8.3",
     "vue-router": "^4.2.4"
   },
   "devDependencies": {

@@ -4,17 +4,23 @@ package spec;
 // import "google/protobuf/empty.proto";
 
 service Catter {
-    // RegisterCat creates a cat by CreateCatRequest data
-    rpc RegisterCat(CreateCatRequest) returns (CreateCatResponse);
+    // Register creates a cat by RegisterCatRequest data
+    rpc Register(RegisterCatRequest) returns (RegisterCatResponse);
 
-    // // UpdateCatName updates a name of a cat
-    // rpc UpdateCatName(UpdateCatFieldRequest) returns (google.protobuf.Empty);
-
-    // // UpdateCatUsername updates a username of a cat
-    // rpc UpdateCatBio(UpdateCatFieldRequest) returns (google.protobuf.Empty);
+    // Login ...
+    rpc Login(LoginCatRequest) returns (LoginCatResponse);
 
     // GetCat gets a cat by id
     rpc GetCat(GetCatRequest) returns (GetCatResponse);
+}
+
+message LoginCatRequest {
+    string username = 1;
+    string password = 2;
+}
+
+message LoginCatResponse {
+    int32 id = 1;
 }
 
 // GetCatRequest is data for getting a cat
@@ -38,20 +44,9 @@ message GetCatResponse {
     optional string bio = 4;
 }
 
-// UpdateCatFieldRequest is used when need to update a field. It is not nesessary to specifiy a field if it is a string.
-message UpdateCatFieldRequest {
-    int32 id = 1;
-    string field = 2;
-}
 
-message Response {
-    // for now - HTTP codes
-    int32 code = 1;
-    string message = 2;
-}
-
-// CreateCatRequest is data for creating a cat
-message CreateCatRequest {
+// RegisterCatRequest is data for creating a cat
+message RegisterCatRequest {
     // name is a name of a cat
     string name = 1;
 
@@ -60,10 +55,12 @@ message CreateCatRequest {
 
     // bio is optional description of a cat
     optional string bio = 3;
+
+    string password = 4;
 }
 
-// CreateCatResponse is answer of service during creating a cat
-message CreateCatResponse {
+// RegisterCatResponse is answer of service during creating a cat
+message RegisterCatResponse {
     // id is an id of a cat, it is unique
     int32 id = 1;
 }
