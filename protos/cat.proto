@@ -1,7 +1,7 @@
 syntax = "proto3";
 package spec;
 
-// import "google/protobuf/empty.proto";
+import "google/protobuf/Empty.proto";
 
 service Catter {
     // Register creates a cat by RegisterCatRequest data
@@ -12,6 +12,49 @@ service Catter {
 
     // GetCat gets a cat by id
     rpc GetCat(GetCatRequest) returns (GetCatResponse);
+
+
+
+    // CreateKitt creates a kitt by CreateKittRequest data
+    rpc CreateKitt(CreateKittRequest) returns (CreateKittResponse);
+
+    // GetKitt gets a kitt by id
+    rpc GetKitt(GetKittRequest) returns (GetKittResponse);
+
+    // ListKitts gets a list of kitts by a cat
+    rpc ListKitts(ListKittsRequest) returns (ListKittsResponse);
+
+    // ListAllKitts geta a list of all kitts
+    rpc ListAllKitts(google.protobuf.Empty) returns (ListKittsResponse);
+}
+
+message ListKittsRequest {
+    // if id is empty, then kitts will be returned from the beginning 
+    int32 cat_id = 1;
+}
+
+message ListKittsResponse {
+    repeated GetKittResponse kitts = 1;
+}
+
+message CreateKittRequest {
+    string content = 1;
+    int32 cat_id = 2;
+}
+
+message CreateKittResponse {
+    int32 id = 1;
+}
+
+message GetKittRequest {
+    int32 id = 1;
+}
+
+message GetKittResponse {
+    int32 id = 1;
+    string content = 2;
+    string created_at = 3;
+    int32 cat_id = 4;
 }
 
 message LoginCatRequest {

@@ -1,0 +1,13 @@
+{
+  "compileOnSave ": true,
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "lib": [ "dom", "dom.iterable", "es2020", "esnext"],
+    "module": "commonjs",
+    "target": "es2020"
+  },
+
+  "files": [
+    "src/main.ts",
+  ]
+}

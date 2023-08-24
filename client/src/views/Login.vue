@@ -2,6 +2,10 @@
     <div>
         <h1>Login</h1>
         <form @submit.prevent="submitForm">
+            <div v-if="errorComponent">
+                Error!
+            </div>
+
             <div>
                 <label for="age">Username:</label>
                 <input type="text" id="username" v-model="cat.username" required>
@@ -10,6 +14,7 @@
                 <label for="bio">Password:</label>
                 <input type="text" id="password" v-model="cat.password" required>
             </div>
+
             <button type="submit">Login</button>
         </form>
     </div>
@@ -25,6 +30,7 @@ export default {
 
         return {
             cat: {} as LoginCatRequest,
+            errorComponent: null,
         }
     },
     methods: {
@@ -32,10 +38,9 @@ export default {
             client.Login(this.cat)
                 .then(response => {
                     this.$cookies.set("login", response.id);
-                    console.log(response)
                 })
                 .catch(error => {
-                    console.log(error)
+                    this.errorComponent = error
                 })
         }
     }

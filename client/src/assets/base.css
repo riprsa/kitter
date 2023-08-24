@@ -11,9 +11,48 @@
 
   --vt-c-text-dark-1: var(--vt-c-white);
   --vt-c-text-dark-2: rgba(235, 235, 235, 0.64);
+
+  --color-background: var(--vt-c-black);
+  --color-background-soft: var(--vt-c-black-soft);
+  --color-background-mute: var(--vt-c-black-mute);
+
+  --color-border: var(--vt-c-divider-dark-2);
+  --color-border-hover: var(--vt-c-divider-dark-1);
+
+  --color-heading: var(--vt-c-text-dark-1);
+  --color-text: var(--vt-c-text-dark-2);
+
+  --color-primary: #00aced;
+  --color-primary-text: var(--vt-c-white);
+  --color-secondary: #e1e8ed;
+  --color-secondary-text: #777;
+  --color-link: var(--vt-c-white);
+  --color-link-hover: #333;
 }
 
-/* probably color theme settings */
+/* light theme */
+@media (prefers-color-scheme: light) {
+  :root {
+    --color-background: var(--vt-c-white);
+    --color-background-soft: #f5f5f5;
+    --color-background-mute: #f0f0f0;
+
+    --color-border: #ddd;
+    --color-border-hover: #ccc;
+
+    --color-heading: var(--vt-c-black);
+    --color-text: rgba(0, 0, 0, 0.8);
+
+    --color-primary: #00aced;
+    --color-primary-text: var(--vt-c-white);
+    --color-secondary: #e1e8ed;
+    --color-secondary-text: #777;
+    --color-link: var(--vt-c-black);
+    --color-link-hover: #eee;
+  }
+}
+
+/* dark theme */
 @media (prefers-color-scheme: dark) {
   :root {
     --color-background: var(--vt-c-black);
@@ -25,6 +64,13 @@
 
     --color-heading: var(--vt-c-text-dark-1);
     --color-text: var(--vt-c-text-dark-2);
+
+    --color-primary: #00aced;
+    --color-primary-text: var(--vt-c-white);
+    --color-secondary: #e1e8ed;
+    --color-secondary-text: #777;
+    --color-link: var(--vt-c-white);
+    --color-link-hover: #333;
   }
 }
 
@@ -40,4 +86,140 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  background-color: var(--color-primary);
+  color: var(--color-primary-text);
+  padding: 10px;
+  text-align: center;
+}
+
+#profile-container {
+  display: flex;
+  width: 800px;
+  margin: 20px auto;
+  border-radius: 5px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+}
+
+.profile {
+  flex: 1;
+  padding: 20px;
+  border-right: 1px solid var(--color-secondary);
+}
+
+.profile img {
+  width: 100px;
+  border-radius: 50%;
+}
+
+.profile h2 {
+  margin: 10px 0;
+  font-size: 24px;
+}
+
+main {
+  flex: 2;
+}
+
+.tweet {
+  padding: 10px;
+  border-bottom: 1px solid var(--color-secondary);
+}
+
+.tweet:last-child {
+  border-bottom: none;
+}
+
+.tweet img {
+  width: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.tweet .tweet-content {
+  display: inline-block;
+  width: calc(100% - 60px);
+}
+
+
+.tweet .tweet-content p {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.tweet .tweet-content .user-info {
+  font-size: 14px;
+  color: var(--color-secondary-text);
+}
+
+.tweet .tweet-content .user-info span {
+  font-weight: bold;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  color: var(--color-primary-text);
+  background-color: var(--color-primary);
+  padding: 1rem;
+}
+
+nav ul {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+nav li {
+  margin-right: 1rem;
+}
+
+nav a {
+  color: var(--color-link);
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1.2rem;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+}
+
+nav a:hover {
+  background-color: var(--color-link-hover);
+  color: var(--color-secondary-text);
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  color: var(--vt-c-white);
+  /* updated */
+  background-color: var(--color-primary);
+  padding: 1rem;
+}
+
+nav a {
+  color: var(--vt-c-white);
+  /* updated */
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1.2rem;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+}
+
+nav a:hover {
+  background-color: var(--color-link-hover);
+  color: var(--color-secondary-text);
 }

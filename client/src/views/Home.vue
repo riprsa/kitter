@@ -1,11 +1,23 @@
 <template>
-    <section id="profile-container">
-        <!-- cat's profile -->
+    <section v-if="isLogin" id="profile-container">
+
         <Cat :cat="cat" :is-loading="isLoading" />
 
         <main>
-            <Kitt />
+
+            <CreateKitt ref="fetchAll" @update="fetchAll()">
+            </CreateKitt>
+
+            <div>
+                <div v-for="(kitt, index) in kitts" :key="index" :kitt="kitt">
+                    <Kitt :is-loading="isLoading" :kitt="kitt" />
+                </div>
+            </div>
         </main>
+
+    </section>
+    <section v-else id="profile-container">
+        <main>Please Login!</main>
     </section>
 </template>
 
@@ -15,35 +27,60 @@ import Cat from "@/components/Cat.vue";
 import Kitt from "@/components/Kitt.vue";
 
 import { client } from "@/client";
-import type { GetCatResponse } from "./../../generated/cat";
+import type { TwirpError } from "twirp-ts";
+import type { GetCatResponse, GetKittResponse } from "./../../generated/cat";
+import CreateKitt from "./../components/CreateKitt.vue";
 
 export default {
     data() {
         return {
             cat: {} as GetCatResponse,
+            kitts: {} as GetKittResponse[],
+            kitt: {} as GetKittResponse,
             isLoading: false,
+
+            isLogin: false,
+
+            error: null,
         }
     },
 
     components: {
         Cat,
         Kitt,
+        CreateKitt
     },
 
     methods: {
-        fetchCat() {
+        fetchAll() {
             this.isLoading = true
 
-            let d = this.$cookies.get("login");
+            // TODO: fix the problem with waiting for http requests
 
-            let id = Number(d);
+            if (!this.$cookies.isKey("login")) {
+                return
+            }
+
+            this.isLogin = true;
+            let d = this.$cookies.get("login");
+            let id = Number(d)
 
             client.GetCat({ id: id })
                 .then((m) => {
                     this.cat = m;
                 })
-                .catch((error) => {
-                    console.log(error)
+                .catch((error: TwirpError) => {
+                    console.log("cat error:", error);
+                })
+
+            client.ListKitts({ catId: id })
+                .then((kitts) => {
+                    console.log(kitts);
+
+                    this.kitts = kitts.kitts;
+                })
+                .catch((error: TwirpError) => {
+                    console.log("kitt error", error);
                 })
                 .finally(() => {
                     this.isLoading = false
@@ -52,7 +89,7 @@ export default {
     },
 
     created() {
-        this.fetchCat()
+        this.fetchAll()
     },
 }
 </script>
