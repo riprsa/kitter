@@ -8,8 +8,10 @@
         <main>
             <CreateKitt ref="fetchAll" @update="fetchAll()">
             </CreateKitt>
-            <div v-for="(kitt, index) in kitts" :key="index" :kitt="kitt">
-                <Kitt :is-loading="isLoading" :kitt="kitt" />
+            <div>
+                <div v-for="(kitt, index) in kitts" :key="index" :kitt="kitt">
+                    <Kitt :is-loading="isLoading" :kitt="kitt" />
+                </div>
             </div>
         </main>
 
@@ -35,15 +37,17 @@ export default {
         return {
             cat: {} as GetCatResponse,
             kitts: {} as GetKittResponse[],
+            kitt: {} as GetKittResponse,
             isLoading: false,
 
             isLogin: false,
 
             error: null,
         }
-    },
+    }, // TODO: this component will be on /$USERNAME request
 
     components: {
+        Cat,
         Kitt,
         CreateKitt,
         Navigation
@@ -52,6 +56,8 @@ export default {
     methods: {
         fetchAll() {
             this.isLoading = true
+
+            // TODO: fix the problem with waiting for http requests
 
             if (!this.$cookies.isKey("login")) {
                 return
@@ -69,7 +75,7 @@ export default {
                     console.log("cat error:", error);
                 })
 
-            client.ListKitts({ catId: id }) // get ALL kitts here
+            client.ListKitts({ catId: id })
                 .then((kitts) => {
                     console.log(kitts);
 

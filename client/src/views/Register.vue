@@ -1,4 +1,6 @@
 <template>
+    <Navigation></Navigation>
+
     <div>
         <h1>Register new cat</h1>
         <form @submit.prevent="submitForm">
@@ -26,12 +28,16 @@
 <script lang="ts">
 import { client } from '@/client';
 import { RegisterCatRequest } from './../../generated/cat';
+import Navigation from "./../components/Navigation.vue";
 
 export default {
     data() {
         return {
             cat: {} as RegisterCatRequest,
         }
+    },
+    components: {
+        Navigation
     },
     methods: {
         submitForm() {

@@ -1,4 +1,6 @@
 <template>
+    <Navigation></Navigation>
+
     <div>
         <h1>Login</h1>
         <form @submit.prevent="submitForm">
@@ -23,15 +25,18 @@
 <script lang="ts">
 import { client } from '@/client';
 import { LoginCatRequest } from './../../generated/cat';
+import Navigation from "./../components/Navigation.vue";
 
 
 export default {
     data() {
-
         return {
             cat: {} as LoginCatRequest,
             errorComponent: null,
         }
+    },
+    components: {
+        Navigation
     },
     methods: {
         submitForm() {
@@ -42,6 +47,7 @@ export default {
                 .catch(error => {
                     this.errorComponent = error
                 })
+            location.replace("/");
         }
     }
 }
