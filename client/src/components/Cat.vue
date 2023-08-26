@@ -1,8 +1,8 @@
 <template>
-    <div class="profile" v-if="!isLoading">
+    <div class="profile">
         <img src="/src/assets/example-pfp.jpg" alt="Profile Picture">
-        <h2>{{ cat.name }}</h2>
-        <p>{{ cat.bio }}</p>
+        <h2>{{ cat.name }}</h2> @{{ cat.username }}
+        <p class="user-info">{{ cat.bio }}</p>
     </div>
 </template>
 
@@ -12,10 +12,6 @@ import type { GetCatResponse } from './../../generated/cat';
 
 export default {
     props: {
-        isLoading: {
-            type: Boolean,
-            required: true,
-        },
         cat: {
             type: Object as PropType<GetCatResponse>,
             required: true,

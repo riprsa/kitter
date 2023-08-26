@@ -1,5 +1,5 @@
 {
-  "name": "cats-twirp-server",
+  "name": "kitter-server",
   "dependencies": {
     "@protobuf-ts/plugin": "^2.2.3-alpha.1",
     "@types/cors": "^2.8.13",

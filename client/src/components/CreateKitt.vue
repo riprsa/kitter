@@ -19,7 +19,6 @@
 import { client } from '@/client';
 import { CreateKittRequest } from './../../generated/cat';
 
-
 export default {
     data() {
         return {
@@ -32,16 +31,14 @@ export default {
             let cook = this.$cookies.get("login");
             this.kitt.catId = parseInt(cook);
             client.CreateKitt(this.kitt)
-                // .then(response => {
-
-                // })
                 .catch(error => {
                     this.errorComponent = error
                 })
-        }
-        ,
+            this.kitt.content = '';
+        },
 
-        toTop() {
+        async toTop() {
+            await new Promise(f => setTimeout(f, 100));
             this.$emit("update", true);
         }
     }

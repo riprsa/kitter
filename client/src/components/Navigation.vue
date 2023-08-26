@@ -1,6 +1,6 @@
 <template>
     <nav v-if="!isLogin">
-        <router-link to="/home">Home</router-link> |
+        <router-link to="/">Home</router-link> |
         <a aria-disabled="true">About</a> |
         <router-link to="/register">Register</router-link> |
         <router-link to="/login">Login</router-link>
@@ -8,8 +8,7 @@
     <nav v-else>
         <router-link to="/">Home</router-link> |
         <a aria-disabled="true">About</a> |
-        <router-link to="/register">Register</router-link> |
-        <router-link to="/?">You</router-link> |
+        <router-link to="/profile">You</router-link> |
         <a @:click="removeCookies()">Logout</a>
     </nav>
 </template>

@@ -3,7 +3,7 @@
         <img src="/src/assets/example-pfp.jpg" alt="Profile Picture">
         <div class="tweet-content">
             <div class="user-info">
-                <span>{{ cat.name }}</span> {{ cat.username }} {{ kitt.createdAt }}
+                <span>{{ cat.name }}</span> @{{ cat.username }} {{ kitt.createdAt }}
             </div>
             <p>{{ kitt.content }}</p>
         </div>
@@ -28,7 +28,6 @@ export default {
     data() {
         return {
             cat: {} as GetCatResponse,
-            isLoading: false,
 
             error: null,
         }

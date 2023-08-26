@@ -3,13 +3,11 @@
 
     <section v-if="isLogin" id="profile-container">
 
-        <Cat :cat="cat" :is-loading="isLoading" />
-
         <main>
-            <CreateKitt ref="fetchAll" @update="fetchAll()">
+            <CreateKitt @update="fetchKitts(currentCatID)">
             </CreateKitt>
             <div v-for="(kitt, index) in kitts" :key="index" :kitt="kitt">
-                <Kitt :is-loading="isLoading" :kitt="kitt" />
+                <Kitt :kitt="kitt" />
             </div>
         </main>
 
@@ -21,7 +19,6 @@
 
 <script lang="ts">
 
-import Cat from "@/components/Cat.vue";
 import Kitt from "@/components/Kitt.vue";
 
 import { client } from "@/client";
@@ -35,9 +32,10 @@ export default {
         return {
             cat: {} as GetCatResponse,
             kitts: {} as GetKittResponse[],
-            isLoading: false,
 
             isLogin: false,
+
+            currentCatID: 0,
 
             error: null,
         }
@@ -50,17 +48,17 @@ export default {
     },
 
     methods: {
-        fetchAll() {
-            this.isLoading = true
+        fetchKitts(id: number) {
+            client.ListKitts({ catId: id })
+                .then((kitts) => {
+                    this.kitts = kitts.kitts;
+                })
+                .catch((error: TwirpError) => {
+                    console.log("kitt error", error);
+                })
+        },
 
-            if (!this.$cookies.isKey("login")) {
-                return
-            }
-
-            this.isLogin = true;
-            let d = this.$cookies.get("login");
-            let id = Number(d)
-
+        fetchCat(id: number) {
             client.GetCat({ id: id })
                 .then((m) => {
                     this.cat = m;
@@ -68,24 +66,21 @@ export default {
                 .catch((error: TwirpError) => {
                     console.log("cat error:", error);
                 })
-
-            client.ListKitts({ catId: id }) // get ALL kitts here
-                .then((kitts) => {
-                    console.log(kitts);
-
-                    this.kitts = kitts.kitts;
-                })
-                .catch((error: TwirpError) => {
-                    console.log("kitt error", error);
-                })
-                .finally(() => {
-                    this.isLoading = false
-                })
         }
     },
 
     created() {
-        this.fetchAll()
+        if (!this.$cookies.isKey("login")) {
+            return
+        }
+        this.isLogin = true;
+
+        let d = this.$cookies.get("login");
+
+        this.currentCatID = Number(d);
+
+        this.fetchCat(this.currentCatID);
+        this.fetchKitts(this.currentCatID);
     },
 }
 </script>

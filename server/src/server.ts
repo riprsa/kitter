@@ -6,9 +6,9 @@ import { Storage } from "./db";
 const storage = new Storage();
 
 export const server = createCatterServer({
-    async GetCat(ctx, request: gen.GetCatRequest): Promise<gen.GetCatResponse> {
+    async GetCat(ctx, req: gen.GetCatRequest): Promise<gen.GetCatResponse> {
         try {
-            var dbCat = await storage.selectCat(request.id);
+            var dbCat = await storage.selectCat(req.id);
         } catch (error) {
             throw new TwirpError(TwirpErrorCode.NotFound, error);
         }
@@ -25,9 +25,9 @@ export const server = createCatterServer({
         });
     },
 
-    async Register(ctx, request: gen.RegisterCatRequest): Promise<gen.RegisterCatResponse> {
+    async Register(ctx, req: gen.RegisterCatRequest): Promise<gen.RegisterCatResponse> {
         try {
-            var id = await storage.insertCat(request);
+            var id = await storage.insertCat(req);
         } catch (error) {
             throw new TwirpError(TwirpErrorCode.NotFound, error);
         }
@@ -41,14 +41,14 @@ export const server = createCatterServer({
         });
     },
 
-    async Login(ctx, request: gen.LoginCatRequest): Promise<gen.LoginCatResponse> {
+    async Login(ctx, req: gen.LoginCatRequest): Promise<gen.LoginCatResponse> {
         try {
-            var dbCat = await storage.findCat(request.username);
+            var dbCat = await storage.findCat(req.username);
         } catch (error) {
             throw new TwirpError(TwirpErrorCode.NotFound, error);
         }
 
-        if (!dbCat || dbCat.password != request.password) {
+        if (!dbCat || dbCat.password != req.password) {
             throw new TwirpError(TwirpErrorCode.PermissionDenied, "wrong password");
         }
 
@@ -61,11 +61,11 @@ export const server = createCatterServer({
         });
     },
 
-    async CreateKitt(ctx, request: gen.CreateKittRequest): Promise<gen.CreateKittResponse> {
+    async CreateKitt(ctx, req: gen.CreateKittRequest): Promise<gen.CreateKittResponse> {
         try {
             var id = await storage.insertKitt({
-                content: request.content,
-                cat_id: request.catId,
+                content: req.content,
+                cat_id: req.catId,
             });
         } catch (error) {
             throw new TwirpError(TwirpErrorCode.NotFound, error);
@@ -76,9 +76,9 @@ export const server = createCatterServer({
         });
     },
 
-    async GetKitt(ctx, request: gen.GetKittRequest): Promise<gen.GetKittResponse> {
+    async GetKitt(ctx, req: gen.GetKittRequest): Promise<gen.GetKittResponse> {
         try {
-            var dbKitt = await storage.selectKitt(request.id)
+            var dbKitt = await storage.selectKitt(req.id);
         } catch (error) {
             throw new TwirpError(TwirpErrorCode.NotFound, error);
         }
@@ -95,9 +95,9 @@ export const server = createCatterServer({
         });
     },
 
-    async ListKitts(ctx, request: gen.ListKittsRequest): Promise<gen.ListKittsResponse> {
+    async ListKitts(ctx, req: gen.ListKittsRequest): Promise<gen.ListKittsResponse> {
         try {
-            var dbKitts = await storage.selectKittsByCatId(request.catId);
+            var dbKitts = await storage.selectKittsByCatId(req.catId);
         } catch (error) {
             throw new TwirpError(TwirpErrorCode.NotFound, error);
         }
@@ -107,6 +107,8 @@ export const server = createCatterServer({
         }
 
         let kittList: gen.GetKittResponse[] = [];
+
+        dbKitts.reverse();
 
         dbKitts.forEach(element => {
             let kitt = gen.GetKittResponse.create({

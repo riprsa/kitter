@@ -5,7 +5,7 @@ export default createRouter({
     history: createWebHistory(),
     routes: [
         {
-            path: '/home',
+            path: '/',
             component: Home,
         },
         {
@@ -15,6 +15,10 @@ export default createRouter({
         {
             path: '/register',
             component: () => import('@/views/Register.vue'),
+        },
+        {
+            path: '/profile',
+            component: () => import('@/views/Profile.vue'),
         },
     ],
 })
