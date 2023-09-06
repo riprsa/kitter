@@ -19,10 +19,11 @@ func main() {
 	// set headers
 	wrapped := service.WithoutCORS(twirpServer)
 
-	wrapped = service.ClientPage(wrapped)
-
 	mux := http.NewServeMux()
+
+	// handle Twirp endpoints
 	mux.Handle(twirpServer.PathPrefix(), wrapped)
+	// handle static files of Vue app
 	mux.Handle("/", http.FileServer(http.FS(os.DirFS("./view"))))
 
 	fmt.Println("listening on :8080")
