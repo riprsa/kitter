@@ -14,6 +14,7 @@ export default defineConfig({
     }
   },
   build: {
-    outDir: "./../server/build/client",
+    outDir: "./../server/view",
+    emptyOutDir: true,
   }
 })
