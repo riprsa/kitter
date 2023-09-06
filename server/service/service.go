@@ -1,45 +1,54 @@
 package service
 
 import (
-	"context"
+	"net/http"
+	"os"
+	"strings"
 
 	"github.com/hararudoka/kitter/pb"
-	"github.com/twitchtv/twirp"
-
-	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
 )
 
 type Service struct {
-	*zerolog.Logger
+	TwirpHandler pb.TwirpServer
+
+	PathPrefix string
 }
 
-func New() pb.Catter {
-	return &Service{
-		Logger: &log.Logger,
+func (s Service) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	if strings.HasPrefix(r.URL.Path, s.PathPrefix) {
+		s.TwirpHandler.ServeHTTP(w, r)
+		return
 	}
+
+	if strings.HasPrefix(r.URL.Path, "/assets") {
+		if strings.HasSuffix(r.URL.Path, ".js") {
+			w.Header().Set("Content-Type", "application/javascript")
+		}
+		http.FileServer(http.FS(os.DirFS("view"))).ServeHTTP(w, r)
+		return
+	}
+
+	http.ServeFile(w, r, "view/index.html")
 }
 
-func (s *Service) Register(ctx context.Context, r *pb.RegisterCatRequest) (*pb.RegisterCatResponse, error) {
-	return nil, twirp.NewError(twirp.Unimplemented, "")
-}
+func New() *Service {
+	var mux = http.NewServeMux()
 
-func (s *Service) Login(context.Context, *pb.LoginCatRequest) (*pb.LoginCatResponse, error) {
-	return nil, twirp.NewError(twirp.Unimplemented, "")
-}
+	var twirpServer = pb.NewCatterServer(
+		NewCatter(),
+	)
 
-func (s *Service) GetCat(context.Context, *pb.GetCatRequest) (*pb.GetCatResponse, error) {
-	return nil, twirp.NewError(twirp.Unimplemented, "")
-}
+	var s = Service{
+		TwirpHandler: twirpServer,
 
-func (s *Service) CreateKitt(context.Context, *pb.CreateKittRequest) (*pb.CreateKittResponse, error) {
-	return nil, twirp.NewError(twirp.Unimplemented, "")
-}
+		PathPrefix: "/twirp",
+	}
 
-func (s *Service) GetKitt(context.Context, *pb.GetKittRequest) (*pb.GetKittResponse, error) {
-	return nil, twirp.NewError(twirp.Unimplemented, "")
-}
+	// set headers
+	wrapped := WithoutCORS(s)
 
-func (s *Service) ListKitts(context.Context, *pb.ListKittsRequest) (*pb.ListKittsResponse, error) {
-	return nil, twirp.NewError(twirp.Unimplemented, "")
+	// handle static files of Vue app
+	mux.Handle("/", wrapped)
+
+	return &s
 }
