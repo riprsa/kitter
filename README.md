@@ -1,17 +1,17 @@
-# Cats Twitter
+# Kitter (Cats Twitter)
 
-The purpose of this project is to demonstrate how to use gRPC with TypeScript. I have no experience with gRPC and TypeScript, so I would like to learn both technologies on the same project. As database I choose SQLite, because it is easy to use and removes pain with database management.
+Cats are internet users too. We, humans, should provide them with a social network.
 
-## How to run?
+## Structure
 
-To generate the gRPC server, use following:
+Three main directories are client, server and protos.
 
-```bash
-npx protoc --ts_opt=server_grpc1 --ts_out codegen/ --proto_path protos protos/cat.proto
-```
+`protos` contains `.proto` files. `server` contains Go Twirp server application. `client` contains Vue.js TypeScript client application.
 
-To generate the gRPC client, use following:
+## Usage
 
-```bash
-npx protoc --ts_opt=client_grpc1 --ts_out codegen/ --proto_path protos protos/cat.proto
-```
+...
+
+## Development environment
+
+...

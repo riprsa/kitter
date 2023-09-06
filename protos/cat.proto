@@ -1,13 +1,97 @@
 syntax = "proto3";
 package spec;
 
+option go_package = "./pb";
+
+// import "google/protobuf/Empty.proto";
+
 service Catter {
-    // RegisterCat creates a cat by CreateCatRequest data
-    rpc RegisterCat (CreateCatRequest) returns (CreateCatResponse);
+    // Register creates a cat by RegisterCatRequest data
+    rpc Register(RegisterCatRequest) returns (RegisterCatResponse);
+
+    // Login ...
+    rpc Login(LoginCatRequest) returns (LoginCatResponse);
+
+    // GetCat gets a cat by id
+    rpc GetCat(GetCatRequest) returns (GetCatResponse);
+
+
+
+    // CreateKitt creates a kitt by CreateKittRequest data
+    rpc CreateKitt(CreateKittRequest) returns (CreateKittResponse);
+
+    // GetKitt gets a kitt by id
+    rpc GetKitt(GetKittRequest) returns (GetKittResponse);
+
+    // ListKitts gets a list of kitts by a cat
+    rpc ListKitts(ListKittsRequest) returns (ListKittsResponse);
+
+    // // ListAllKitts geta a list of all kitts
+    // rpc ListAllKitts(google.protobuf.Empty) returns (ListKittsResponse);
 }
 
-// CreateCatRequest is data for creating a cat
-message CreateCatRequest {
+message ListKittsRequest {
+    // if id is empty, then kitts will be returned from the beginning 
+    int32 cat_id = 1;
+}
+
+message ListKittsResponse {
+    repeated GetKittResponse kitts = 1;
+}
+
+message CreateKittRequest {
+    string content = 1;
+    int32 cat_id = 2;
+}
+
+message CreateKittResponse {
+    int32 id = 1;
+}
+
+message GetKittRequest {
+    int32 id = 1;
+}
+
+message GetKittResponse {
+    int32 id = 1;
+    string content = 2;
+    string created_at = 3;
+    int32 cat_id = 4;
+}
+
+message LoginCatRequest {
+    string username = 1;
+    string password = 2;
+}
+
+message LoginCatResponse {
+    int32 id = 1;
+}
+
+// GetCatRequest is data for getting a cat
+message GetCatRequest {
+    // id is an id of a cat
+    int32 id = 1;
+}
+
+// GetCatResponse is answer of service during getting a cat
+message GetCatResponse {
+    // id is an id of a cat, it is unique
+    int32 id = 1;
+
+    // name is a name of a cat
+    string name = 2;
+
+    // usename is unchangable username of a cat
+    string username = 3;
+
+    // bio is optional description of a cat
+    optional string bio = 4;
+}
+
+
+// RegisterCatRequest is data for creating a cat
+message RegisterCatRequest {
     // name is a name of a cat
     string name = 1;
 
@@ -16,10 +100,12 @@ message CreateCatRequest {
 
     // bio is optional description of a cat
     optional string bio = 3;
+
+    string password = 4;
 }
 
-// CreateCatResponse is answer of service during creating a cat
-message CreateCatResponse {
+// RegisterCatResponse is answer of service during creating a cat
+message RegisterCatResponse {
     // id is an id of a cat, it is unique
-    int64 id = 1;
+    int32 id = 1;
 }
