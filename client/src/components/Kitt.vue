@@ -1,8 +1,8 @@
 <template>
-    <div class="tweet">
+    <div>
         <img src="/src/assets/example-pfp.jpg" alt="Profile Picture">
-        <div class="tweet-content">
-            <div class="user-info">
+        <div>
+            <div>
                 <span>{{ cat.name }}</span> @{{ cat.username }} {{ kitt.createdAt }}
             </div>
             <p>{{ kitt.content }}</p>
@@ -15,7 +15,7 @@
 import { client } from '@/client';
 import type { TwirpError } from 'twirp-ts';
 import type { PropType } from 'vue';
-import type { GetCatResponse, GetKittResponse } from './../../generated/cat';
+import type { GetCatResponse, GetKittResponse } from './../generated/cat';
 
 export default {
     props: {
@@ -50,3 +50,4 @@ export default {
     },
 }
 </script>
+../generated/cat

@@ -1,7 +1,7 @@
 <template>
     <Navigation></Navigation>
 
-    <section v-if="isLogin" id="profile-container">
+    <section v-if="isLogin">
 
         <main>
             <CreateKitt @update="fetchKitts(currentCatID)">
@@ -12,8 +12,18 @@
         </main>
 
     </section>
-    <section v-else id="profile-container">
-        <main>Please Login!</main>
+
+    <section v-else>
+        <div class="hero bg-base-200" style="min-height: 70vh;">
+            <div class="hero-content flex-col lg:flex-row">
+                <img src="../assets/cat.jpg" class="max-w-sm rounded-lg shadow-2xl" />
+                <div>
+                    <h1 class="text-5xl font-bold">Welcome on Kitter!</h1>
+                    <p class="py-6">This is the place, where your cat will finally get a social network expirience</p>
+                    <router-link to="/login" class="btn btn-primary">Login</router-link>
+                </div>
+            </div>
+        </div>
     </section>
 </template>
 
@@ -23,9 +33,9 @@ import Kitt from "@/components/Kitt.vue";
 
 import { client } from "@/client";
 import type { TwirpError } from "twirp-ts";
-import type { GetCatResponse, GetKittResponse } from "./../../generated/cat";
 import CreateKitt from "./../components/CreateKitt.vue";
 import Navigation from "./../components/Navigation.vue";
+import type { GetCatResponse, GetKittResponse } from "./../generated/cat";
 
 export default {
     data() {
@@ -83,4 +93,4 @@ export default {
         this.fetchKitts(this.currentCatID);
     },
 }
-</script>
+</script>../generated/cat

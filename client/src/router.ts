@@ -1,4 +1,4 @@
-import Home from "@/views/Home.vue"
+import Home from "@/pages/Home.vue"
 import { createRouter, createWebHistory } from 'vue-router'
 
 export default createRouter({
@@ -10,15 +10,15 @@ export default createRouter({
         },
         {
             path: '/login',
-            component: () => import('@/views/Login.vue'),
+            component: () => import('@/pages/Login.vue'),
         },
         {
             path: '/register',
-            component: () => import('@/views/Register.vue'),
+            component: () => import('@/pages/Register.vue'),
         },
         {
             path: '/profile',
-            component: () => import('@/views/Profile.vue'),
+            component: () => import('@/pages/Profile.vue'),
         },
     ],
 })

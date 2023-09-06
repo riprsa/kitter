@@ -16,7 +16,7 @@
         </main>
 
     </section>
-    <section v-else id="profile-container">
+    <section v-else>
         <main>Please Login!</main>
     </section>
 </template>
@@ -28,9 +28,9 @@ import Kitt from "@/components/Kitt.vue";
 
 import { client } from "@/client";
 import type { TwirpError } from "twirp-ts";
-import type { GetCatResponse, GetKittResponse } from "./../../generated/cat";
 import CreateKitt from "./../components/CreateKitt.vue";
 import Navigation from "./../components/Navigation.vue";
+import type { GetCatResponse, GetKittResponse } from "./../generated/cat";
 
 export default {
     data() {
@@ -94,4 +94,4 @@ export default {
         this.fetchAll()
     },
 }
-</script>
+</script>../generated/cat

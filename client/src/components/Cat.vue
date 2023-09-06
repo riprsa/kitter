@@ -1,14 +1,14 @@
 <template>
-    <div class="profile">
+    <div>
         <img src="/src/assets/example-pfp.jpg" alt="Profile Picture">
         <h2>{{ cat.name }}</h2> @{{ cat.username }}
-        <p class="user-info">{{ cat.bio }}</p>
+        <p>{{ cat.bio }}</p>
     </div>
 </template>
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import type { GetCatResponse } from './../../generated/cat';
+import type { GetCatResponse } from './../generated/cat';
 
 export default {
     props: {
@@ -22,3 +22,4 @@ export default {
     },
 }
 </script>
+../generated/cat

@@ -7,7 +7,7 @@
             </div>
 
             <div>
-                <textarea id="kitt" v-model="kitt.content" required></textarea>
+                <textarea v-model="kitt.content" required></textarea>
             </div>
 
             <button @click="toTop" type="submit">Kitt</button>
@@ -17,7 +17,7 @@
 
 <script lang="ts">
 import { client } from '@/client';
-import { CreateKittRequest } from './../../generated/cat';
+import { CreateKittRequest } from './../generated/cat';
 
 export default {
     data() {
@@ -44,3 +44,4 @@ export default {
     }
 }
 </script>
+../generated/cat

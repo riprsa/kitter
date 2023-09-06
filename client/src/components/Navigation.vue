@@ -1,15 +1,25 @@
 <template>
-    <nav v-if="!isLogin">
-        <router-link to="/">Home</router-link> |
-        <a aria-disabled="true">About</a> |
-        <router-link to="/register">Register</router-link> |
-        <router-link to="/login">Login</router-link>
-    </nav>
-    <nav v-else>
-        <router-link to="/">Home</router-link> |
-        <a aria-disabled="true">About</a> |
-        <router-link to="/profile">You</router-link> |
-        <a @:click="removeCookies()">Logout</a>
+    <nav class="navbar bg-base-100">
+        <div class="navbar-start">
+            <router-link to="/" class="btn btn-ghost normal-case text-xl">Kitter</router-link>
+        </div>
+
+        <!-- <div class="navbar-center">
+            <ul class="menu menu-horizontal px-1">
+                <li><a>Item 1</a></li>
+                <li><a>Item 2</a></li>
+            </ul>
+        </div> -->
+
+        <div class="navbar-end" v-if="!isLogin">
+            <router-link to="/register" class="btn">Register</router-link>
+            <router-link to="/login" class="btn btn-primary">Login</router-link>
+        </div>
+
+        <div class="navbar-end" v-else>
+            <router-link to="/profile" class="btn">Your Cat</router-link>
+            <a class="btn btn-primary" @:click="removeCookies()">Logout</a>
+        </div>
     </nav>
 </template>
 
