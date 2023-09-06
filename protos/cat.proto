@@ -1,7 +1,9 @@
 syntax = "proto3";
 package spec;
 
-import "google/protobuf/Empty.proto";
+option go_package = "./pb";
+
+// import "google/protobuf/Empty.proto";
 
 service Catter {
     // Register creates a cat by RegisterCatRequest data
@@ -24,8 +26,8 @@ service Catter {
     // ListKitts gets a list of kitts by a cat
     rpc ListKitts(ListKittsRequest) returns (ListKittsResponse);
 
-    // ListAllKitts geta a list of all kitts
-    rpc ListAllKitts(google.protobuf.Empty) returns (ListKittsResponse);
+    // // ListAllKitts geta a list of all kitts
+    // rpc ListAllKitts(google.protobuf.Empty) returns (ListKittsResponse);
 }
 
 message ListKittsRequest {
